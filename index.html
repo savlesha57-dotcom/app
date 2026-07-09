@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календарь 2026 — Инфографика</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f7f4fc;
+            padding: 20px;
+        }
+
+        #openCalendarBtn {
+            font-size: 1.5rem;
+            padding: 1rem 2.8rem;
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            box-shadow: 0 8px 28px rgba(124, 58, 237, 0.35);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            margin-bottom: 30px;
+            z-index: 5;
+        }
+
+        #openCalendarBtn:hover {
+            background: #6d28d9;
+            transform: scale(1.02);
+            box-shadow: 0 12px 36px rgba(124, 58, 237, 0.45);
+        }
+
+        #openCalendarBtn:active {
+            transform: scale(0.96);
+        }
+
+        .storage-warning {
+            display: none;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 14px 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #fbbf24;
+            font-size: 0.95rem;
+            max-width: 600px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15);
+        }
+
+        .storage-warning.visible {
+            display: block;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .calendar-wrapper {
+            display: none;
+            width: 100%;
+            max-width: 1150px;
+            background: #ffffff;
+            border-radius: 40px;
+            padding: 34px 28px 38px;
+            box-shadow: 0 24px 60px rgba(124, 58, 237, 0.10), 0 8px 24px rgba(0, 0, 0, 0.04);
+            margin-top: 10px;
+            border: 1px solid rgba(124, 58, 237, 0.08);
+        }
+
+        .calendar-wrapper.visible {
+            display: block;
+            animation: fadeSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .year-title {
+            text-align: center;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #4c1d95;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            padding-bottom: 18px;
+            border-bottom: 3px solid #ede9fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .year-title .emoji-big {
+            font-size: 2.6rem;
+            line-height: 1;
+        }
+
+        .year-title .year-badge {
+            background: #ede9fe;
+            color: #5b21b6;
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+            gap: 28px 24px;
+            justify-content: center;
+        }
+
+        .month-card {
+            background: #faf8ff;
+            border-radius: 28px;
+            padding: 18px 14px 20px;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.06);
+            border: 1px solid #ede9fe;
+            transition: all 0.25s ease;
+            animation: cardPop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .month-card:hover {
+            border-color: #c4b5fd;
+            box-shadow: 0 8px 28px rgba(124, 58, 237, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .month-card:nth-child(1) { animation-delay: 0.02s; }
+        .month-card:nth-child(2) { animation-delay: 0.06s; }
+        .month-card:nth-child(3) { animation-delay: 0.10s; }
+        .month-card:nth-child(4) { animation-delay: 0.14s; }
+        .month-card:nth-child(5) { animation-delay: 0.18s; }
+        .month-card:nth-child(6) { animation-delay: 0.22s; }
+        .month-card:nth-child(7) { animation-delay: 0.26s; }
+        .month-card:nth-child(8) { animation-delay: 0.30s; }
+        .month-card:nth-child(9) { animation-delay: 0.34s; }
+        .month-card:nth-child(10) { animation-delay: 0.38s; }
+        .month-card:nth-child(11) { animation-delay: 0.42s; }
+        .month-card:nth-child(12) { animation-delay: 0.46s; }
+
+        @keyframes cardPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.94) translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .month-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #4c1d95;
+            text-align: center;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ede9fe;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #7c6a9e;
+            letter-spacing: 0.4px;
+            margin-bottom: 6px;
+            padding: 0 2px;
+            text-transform: uppercase;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .day-cell {
+            padding: 7px 0;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #2d1b4e;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            position: relative;
+            user-select: none;
+            font-size: 0.9rem;
+        }
+
+        .day-cell.empty {
+            color: transparent;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .day-cell.weekend {
+            color: #a78bcb;
+        }
+
+        .day-cell.today {
+            background: #7c3aed;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .day-cell:hover:not(.empty) {
+            background: #ede9fe;
+            transform: scale(1.06);
+        }
+
+        .day-cell.has-note::after {
+            content: "✦";
+            position: absolute;
+            top: -2px;
+            right: 3px;
+            font-size: 0.55rem;
+            color: #7c3aed;
+            font-weight: 700;
+        }
+
+        .day-cell.today.has-note::after {
+            color: #c4b5fd;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #7c6a9e;
+            border-top: 2px solid #ede9fe;
+            padding-top: 20px;
+            letter-spacing: 0.3px;
+            font-weight: 500;
+        }
+
+        .footer-note span {
+            background: #ede9fe;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #5b21b6;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 20, 80, 0.40);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: modalFadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes modalFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.94);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border-radius: 40px;
+            padding: 38px 34px 34px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 32px 72px rgba(44, 20, 80, 0.20);
+            position: relative;
+            border: 1px solid rgba(124, 58, 237, 0.08);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ede9fe;
+            padding-bottom: 16px;
+        }
+
+        .modal-date {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4c1d95;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            line-height: 1;
+            color: #8b7aa8;
+            cursor: pointer;
+            padding: 0 6px;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #4c1d95;
+            background: #ede9fe;
+            transform: rotate(90deg);
+        }
+
+        .todo-add-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+            align-items: center;
+        }
+
+        .todo-add-row input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #ede9fe;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            background: #faf8ff;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            color: #2d1b4e;
+            font-weight: 500;
+        }
+
+        .todo-add-row input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.10);
+        }
+
+        .todo-add-row input::placeholder {
+            color: #b8aad0;
+            font-weight: 400;
+        }
+
+        .todo-add-row button {
+            padding: 12px 24px;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .todo-add-row button:hover {
+            background: #6d28d9;
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.25);
+        }
+
+        .todo-add-row button:active {
+            transform: scale(0.96);
+        }
+
+        .todo-list {
+            margin-top: 22px;
+            max-height: 210px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .todo-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .todo-list::-webkit-scrollbar-thumb {
+            background: #c4b5fd;
+            border-radius: 20px;
+        }
+        .todo-list::-webkit-scrollbar-track {
+            background: #f5f0ff;
+            border-radius: 20px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            background: #faf8ff;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #ede9fe;
+            transition: all 0.2s ease;
+            animation: itemPop 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes itemPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.94) translateX(-8px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateX(0);
+            }
+        }
+
+        .todo-item:hover {
+            background: #f5f0ff;
+            border-color: #c4b5fd;
+        }
+
+        .todo-item .todo-text {
+            flex: 1;
+            font-size: 0.95rem;
+            word-break: break-word;
+            color: #2d1b4e;
+            padding: 2px 0;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .todo-item .todo-text.done {
+            text-decoration: line-through;
+            color: #a78bcb;
+        }
+
+        .todo-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: #7c3aed;
+            cursor: pointer;
+            flex-shrink: 0;
+            border-radius: 8px;
+            border: 2px solid #c4b5fd;
+            transition: all 0.15s ease;
+        }
+
+        .todo-item input[type="checkbox"]:hover {
+            transform: scale(1.10);
+        }
+
+        .todo-item .todo-delete {
+            background: none;
+            border: none;
+            color: #b8aad0;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 6px;
+            transition: all 0.2s ease;
+            line-height: 1;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .todo-item .todo-delete:hover {
+            color: #dc2626;
+            background: #fee2e2;
+            transform: scale(1.10);
+        }
+
+        .todo-empty {
+            text-align: center;
+            color: #b8aad0;
+            padding: 24px 0 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+            margin-top: 24px;
+            border-top: 2px solid #ede9fe;
+            padding-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn.save {
+            background: #7c3aed;
+            color: white;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.20);
+        }
+
+        .modal-btn.save:hover {
+            background: #6d28d9;
+            transform: scale(1.02);
+            box-shadow: 0 6px 24px rgba(124, 58, 237, 0.30);
+        }
+
+        .modal-btn.delete {
+            background: transparent;
+            color: #a78bcb;
+        }
+
+        .modal-btn.delete:hover {
+            background: #f5f0ff;
+            color: #6d28d9;
+        }
+
+        @media (max-width: 820px) {
+            .calendar-wrapper {
+                padding: 24px 18px 28px;
+                border-radius: 32px;
+            }
+            .months-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 22px 18px;
+            }
+            .year-title {
+                font-size: 2rem;
+            }
+            .modal-box {
+                padding: 30px 22px 26px;
+                border-radius: 32px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            #openCalendarBtn {
+                font-size: 1.2rem;
+                padding: 0.8rem 2rem;
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 320px;
+            }
+            .calendar-wrapper {
+                padding: 18px 12px 22px;
+                border-radius: 28px;
+            }
+            .year-title {
+                font-size: 1.5rem;
+                gap: 8px;
+                padding-bottom: 12px;
+                margin-bottom: 20px;
+            }
+            .year-title .emoji-big { font-size: 1.8rem; }
+            .year-title .year-badge {
+                font-size: 1rem;
+                padding: 2px 14px;
+            }
+            .months-grid {
+                grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+                gap: 16px 12px;
+            }
+            .month-card {
+                padding: 12px 8px 14px;
+                border-radius: 22px;
+            }
+            .month-name {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+                padding-bottom: 6px;
+            }
+            .weekdays {
+                font-size: 0.6rem;
+                margin-bottom: 4px;
+            }
+            .days-grid {
+                font-size: 0.75rem;
+                gap: 2px;
+            }
+            .day-cell {
+                padding: 5px 0;
+                font-size: 0.75rem;
+                border-radius: 24px;
+            }
+            .day-cell.has-note::after {
+                font-size: 0.45rem;
+                top: -1px;
+                right: 2px;
+            }
+            .footer-note {
+                font-size: 0.8rem;
+                margin-top: 20px;
+                padding-top: 14px;
+            }
+            .footer-note span {
+                padding: 4px 14px;
+            }
+            .modal-box {
+                padding: 24px 16px 20px;
+                border-radius: 28px;
+                max-width: 100%;
+                margin: 10px;
+            }
+            .modal-date {
+                font-size: 1.2rem;
+            }
+            .modal-close {
+                width: 36px;
+                height: 36px;
+                font-size: 1.5rem;
+            }
+            .todo-add-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .todo-add-row input {
+                min-width: 100%;
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+            .todo-add-row button {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            .todo-item {
+                padding: 8px 10px;
+                gap: 10px;
+                border-radius: 16px;
+            }
+            .todo-item .todo-text {
+                font-size: 0.85rem;
+            }
+            .todo-item input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+            }
+            .todo-item .todo-delete {
+                font-size: 1rem;
+                width: 28px;
+                height: 28px;
+            }
+            .modal-actions {
+                flex-direction: column-reverse;
+                gap: 8px;
+                padding-top: 16px;
+                margin-top: 18px;
+            }
+            .modal-btn {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            .todo-empty {
+                font-size: 0.85rem;
+                padding: 16px 0 8px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .months-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px 10px;
+            }
+            .day-cell {
+                font-size: 0.7rem;
+                padding: 4px 0;
+            }
+            .month-card {
+                padding: 10px 6px 12px;
+            }
+            .year-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="storage-warning" id="storageWarning">
+        ⚠️ LocalStorage недоступен. Данные будут храниться только в памяти.
+    </div>
+
+    <button id="openCalendarBtn">📅 Открыть календарь</button>
+
+    <div class="calendar-wrapper" id="calendarWrapper">
+        <div class="year-title">
+            <span class="emoji-big">🗓</span>
+            2026
+            <span class="year-badge">инфографика</span>
+        </div>
+        <div class="months-grid" id="monthsContainer"></div>
+        <div class="footer-note">
+            <span>✦ нажми на день — добавь заметку</span>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-date" id="modalDateLabel">1 января 2026</span>
+                <button class="modal-close" id="modalCloseBtn">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="todo-add-row">
+                    <input type="text" id="newTodoInput" placeholder="Новая заметка…" maxlength="120">
+                    <button id="addTodoBtn">➕ Добавить</button>
+                </div>
+                <div class="todo-list" id="todoListContainer"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn delete" id="deleteAllTodosBtn">🗑 Удалить все</button>
+                <button class="modal-btn save" id="saveNoteBtn">💾 Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+            
+            // -------- ДАННЫЕ: КАЛЕНДАРЬ 2026 --------
+            const year = 2026;
+            const monthsData = [
+                { name: 'Январь', days: 31 },
+                { name: 'Февраль', days: 28 },
+                { name: 'Март', days: 31 },
+                { name: 'Апрель', days: 30 },
+                { name: 'Май', days: 31 },
+                { name: 'Июнь', days: 30 },
+                { name: 'Июль', days: 31 },
+                { name: 'Август', days: 31 },
+                { name: 'Сентябрь', days: 30 },
+                { name: 'Октябрь', days: 31 },
+                { name: 'Ноябрь', days: 30 },
+                { name: 'Декабрь', days: 31 }
+            ];
+
+            // -------- LOCALSTORAGE С ОБРАБОТКОЙ ОШИБОК --------
+            const STORAGE_KEY = 'calendar_notes_2026';
+            let storageAvailable = true;
+            let inMemoryStorage = {};
+
+            function isLocalStorageAvailable() {
+                try {
+                    const testKey = '__test__';
+                    localStorage.setItem(testKey, 'test');
+                    localStorage.removeItem(testKey);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
+            }
+
+            function loadNotesFromStorage() {
+                if (!isLocalStorageAvailable()) {
+                    storageAvailable = false;
+                    const warning = document.getElementById('storageWarning');
+                    if (warning) warning.classList.add('visible');
+                    return {};
+                }
+                try {
+                    const data = localStorage.getItem(STORAGE_KEY);
+                    if (data) return JSON.parse(data);
+                } catch (_) {
+                    storageAvailable = false;
+                    const warning = document.getElementById('storageWarning');
+                    if (warning) warning.classList.add('visible');
+                }
+                return {};
+            }
+
+            function saveNotesToStorage(notes) {
+                if (!storageAvailable) {
+                    inMemoryStorage = JSON.parse(JSON.stringify(notes));
+                    return;
+                }
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+                } catch (_) {
+                    storageAvailable = false;
+                    const warning = document.getElementById('storageWarning');
+                    if (warning) warning.classList.add('visible');
+                    inMemoryStorage = JSON.parse(JSON.stringify(notes));
+                }
+            }
+
+            let notes = loadNotesFromStorage();
+            if (!storageAvailable && Object.keys(inMemoryStorage).length > 0) {
+                notes = JSON.parse(JSON.stringify(inMemoryStorage));
+            }
+
+            // -------- ВСПОМОГАТЕЛЬНЫЕ --------
+            function getFirstDayOfMonth(monthIndex, year) {
+                return new Date(year, monthIndex, 1).getDay();
+            }
+
+            function formatDateKey(day, monthIndex, year) {
+                return `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
+
+            // -------- РЕНДЕР КАЛЕНДАРЯ --------
+            function buildMonthHTML(monthIndex, monthName, daysInMonth) {
+                const firstDay = getFirstDayOfMonth(monthIndex, year);
+                let offset = (firstDay === 0) ? 6 : firstDay - 1;
+
+                let daysHTML = '';
+                for (let i = 0; i < offset; i++) {
+                    daysHTML += `<div class="day-cell empty"></div>`;
+                }
+
+                const today = new Date();
+                const todayDate = today.getDate();
+                const todayMonth = today.getMonth();
+                const todayYear = today.getFullYear();
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateKey = formatDateKey(d, monthIndex, year);
+                    const isWeekend = ((offset + d - 1) % 7 === 5) || ((offset + d - 1) % 7 === 6);
+                    let classNames = 'day-cell';
+                    if (isWeekend) classNames += ' weekend';
+                    if (todayYear === year && todayMonth === monthIndex && todayDate === d) {
+                        classNames += ' today';
+                    }
+                    if (notes[dateKey] && notes[dateKey].length > 0) {
+                        classNames += ' has-note';
+                    }
+
+                    daysHTML += `<div class="${classNames}" data-day="${d}" data-month="${monthIndex}" data-year="${year}" data-key="${dateKey}">${d}</div>`;
+                }
+
+                const totalCells = offset + daysInMonth;
+                const remainder = totalCells % 7;
+                if (remainder > 0) {
+                    for (let i = 0; i < (7 - remainder); i++) {
+                        daysHTML += `<div class="day-cell empty"></div>`;
+                    }
+                }
+
+                return `
+                    <div class="month-card">
+                        <div class="month-name">${monthName}</div>
+                        <div class="weekdays">
+                            <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                        </div>
+                        <div class="days-grid">
+                            ${daysHTML}
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderCalendar() {
+                const container = document.getElementById('monthsContainer');
+                if (!container) return;
+                let allMonthsHTML = '';
+                monthsData.forEach((month, idx) => {
+                    allMonthsHTML += buildMonthHTML(idx, month.name, month.days);
+                });
+                container.innerHTML = allMonthsHTML;
+
+                document.querySelectorAll('.day-cell:not(.empty)').forEach(cell => {
+                    cell.addEventListener('click', function() {
+                        const day = parseInt(this.dataset.day);
+                        const month = parseInt(this.dataset.month);
+                        const year = parseInt(this.dataset.year);
+                        const key = this.dataset.key;
+                        openNoteModal(day, month, year, key);
+                    });
+                });
+            }
+
+            // -------- МОДАЛЬНОЕ ОКНО --------
+            let currentKey = '';
+            let currentTodos = [];
+
+            const modal = document.getElementById('noteModal');
+            const modalDateLabel = document.getElementById('modalDateLabel');
+            const newTodoInput = document.getElementById('newTodoInput');
+            const addTodoBtn = document.getElementById('addTodoBtn');
+            const saveBtn = document.getElementById('saveNoteBtn');
+            const deleteAllBtn = document.getElementById('deleteAllTodosBtn');
+            const closeBtn = document.getElementById('modalCloseBtn');
+            const todoContainer = document.getElementById('todoListContainer');
+
+            function renderTodoList() {
+                if (!todoContainer) return;
+                if (!currentTodos || currentTodos.length === 0) {
+                    todoContainer.innerHTML = `<div class="todo-empty">✏️ Нет заметок. Добавьте новую выше</div>`;
+                    return;
+                }
+
+                let html = '';
+                currentTodos.forEach((todo, index) => {
+                    const checked = todo.done ? 'checked' : '';
+                    const doneClass = todo.done ? 'done' : '';
+                    html += `
+                        <div class="todo-item" data-index="${index}">
+                            <input type="checkbox" ${checked} class="todo-checkbox" data-index="${index}">
+                            <span class="todo-text ${doneClass}">${escapeHtml(todo.text)}</span>
+                            <button class="todo-delete" data-index="${index}">✕</button>
+                        </div>
+                    `;
+                });
+                todoContainer.innerHTML = html;
+
+                todoContainer.querySelectorAll('.todo-checkbox').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        const idx = parseInt(this.dataset.index);
+                        if (!isNaN(idx) && currentTodos[idx]) {
+                            currentTodos[idx].done = this.checked;
+                            const parent = this.closest('.todo-item');
+                            const textSpan = parent.querySelector('.todo-text');
+                            if (textSpan) {
+                                textSpan.classList.toggle('done', this.checked);
+                            }
+                            saveTodosToStorage();
+                        }
+                    });
+                });
+
+                todoContainer.querySelectorAll('.todo-delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        if (!isNaN(idx) && currentTodos[idx]) {
+                            currentTodos.splice(idx, 1);
+                            renderTodoList();
+                            saveTodosToStorage();
+                        }
+                    });
+                });
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function addNewTodo() {
+                const text = newTodoInput.value.trim();
+                if (text === '') {
+                    alert('Введите текст заметки');
+                    return;
+                }
+                if (!currentTodos) currentTodos = [];
+                currentTodos.push({ text: text, done: false });
+                newTodoInput.value = '';
+                renderTodoList();
+                saveTodosToStorage();
+                newTodoInput.focus();
+            }
+
+            function saveTodosToStorage() {
+                if (currentKey) {
+                    if (currentTodos && currentTodos.length > 0) {
+                        notes[currentKey] = JSON.parse(JSON.stringify(currentTodos));
+                    } else {
+                        delete notes[currentKey];
+                    }
+                    saveNotesToStorage(notes);
+                    refreshCalendar();
+                }
+            }
+
+            function deleteAllTodos() {
+                if (currentTodos && currentTodos.length > 0) {
+                    if (confirm('Удалить все заметки на этот день?')) {
+                        currentTodos = [];
+                        renderTodoList();
+                        saveTodosToStorage();
+                    }
+                } else {
+                    alert('Нет заметок для удаления');
+                }
+            }
+
+            function openNoteModal(day, monthIndex, year, key) {
+                currentKey = key;
+                const monthName = monthsData[monthIndex].name;
+                modalDateLabel.textContent = `${day} ${monthName} ${year}`;
+
+                if (notes[key]) {
+                    currentTodos = JSON.parse(JSON.stringify(notes[key]));
+                } else {
+                    currentTodos = [];
+                }
+
+                renderTodoList();
+                newTodoInput.value = '';
+                modal.classList.add('active');
+                setTimeout(() => newTodoInput.focus(), 100);
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                currentKey = '';
+                currentTodos = [];
+            }
+
+            function saveAndClose() {
+                saveTodosToStorage();
+                closeModal();
+            }
+
+            // -------- ОБРАБОТЧИКИ МОДАЛКИ --------
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    saveTodosToStorage();
+                    closeModal();
+                }
+            });
+
+            addTodoBtn.addEventListener('click', addNewTodo);
+            newTodoInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addNewTodo();
+                }
+            });
+
+            saveBtn.addEventListener('click', saveAndClose);
+            deleteAllBtn.addEventListener('click', deleteAllTodos);
+            closeBtn.addEventListener('click', function() {
+                saveTodosToStorage();
+                closeModal();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    saveTodosToStorage();
+                    closeModal();
+                }
+            });
+
+            function refreshCalendar() {
+                renderCalendar();
+            }
+
+            // -------- УПРАВЛЕНИЕ ПОКАЗОМ КАЛЕНДАРЯ --------
+            const btn = document.getElementById('openCalendarBtn');
+            const wrapper = document.getElementById('calendarWrapper');
+            let isRendered = false;
+
+            function openCalendar() {
+                if (!isRendered) {
+                    renderCalendar();
+                    isRendered = true;
+                }
+                wrapper.classList.add('visible');
+                wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (wrapper.classList.contains('visible')) {
+                    wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+                openCalendar();
+            });
+
+            console.log('✅ Календарь 2026 успешно загружен!');
+            if (storageAvailable) {
+                console.log('💾 LocalStorage доступен');
+            } else {
+                console.log('⚠️ LocalStorage НЕ ДОСТУПЕН, данные в памяти');
+            }
+        })();
+    </script>
+</body>
+</html>
